@@ -25,7 +25,7 @@ class _OrderItemState extends State<OrderItem> {
           ListTile(
             title: Text('\$${widget.order.amount}'),
             subtitle: Text(
-                DateFormat('dd/MM/yyyy hh:mm').format(widget.order.datetime)),
+                DateFormat('dd/MM/yyyy hh:mm').format(widget.order.dateTime)),
             trailing: IconButton(
               icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
               onPressed: () {
@@ -50,7 +50,7 @@ class _OrderItemState extends State<OrderItem> {
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               Text(
-                                '${prod.quatity}x \$${prod.price}',
+                                '${prod.quantity}x \$${prod.price}',
                                 style:
                                     TextStyle(fontSize: 18, color: Colors.grey),
                               )

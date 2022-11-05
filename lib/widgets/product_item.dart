@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
+import '../providers/auth.dart';
 
 class ProductItem extends StatelessWidget {
   // final String id;
@@ -17,6 +18,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
       child: GridTile(
@@ -25,9 +27,10 @@ class ProductItem extends StatelessWidget {
             Navigator.of(context).pushNamed(ProductDetailScreen.routeName,
                 arguments: product.id);
           },
-          child:  CachedNetworkImage(
+          child: CachedNetworkImage(
             placeholder: (context, url) => const CircularProgressIndicator(),
-            imageUrl: product.imageUrl,  fit: BoxFit.cover,
+            imageUrl: product.imageUrl,
+            fit: BoxFit.cover,
           ),
         ),
         footer: GridTileBar(
@@ -35,7 +38,8 @@ class ProductItem extends StatelessWidget {
           leading: Consumer<Product>(
             builder: (ctx, product, child) => IconButton(
                 onPressed: () {
-                  product.toggleFavoriteStatus(); //notifyListener여서 consumer로 감쌈
+                  product.toggleFavoriteStatus(authData.token!,
+                      authData.userId!); //notifyListener여서 consumer로 감쌈
                 },
                 color: Theme.of(context).accentColor,
                 icon: Icon(product.isFavorite
