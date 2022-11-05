@@ -76,7 +76,7 @@ class Auth with ChangeNotifier {
       return false;
     }
     final extractedUserData =
-        json.decode(prefs.getString('userData') as String) ;
+        json.decode(prefs.getString('userData')!) as Map<String, dynamic>;;
     final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
 
     if (expiryDate.isBefore(DateTime.now())) {
@@ -98,10 +98,11 @@ class Auth with ChangeNotifier {
       _authTimer?.cancel();
       _authTimer = null;
     }
-    notifyListeners();
+    
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('userData');
     prefs.clear();
+    notifyListeners();
   }
 
   void _autoLogout() {

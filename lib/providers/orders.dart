@@ -32,7 +32,7 @@ class Orders with ChangeNotifier {
         'https://flutter-update-803f6-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken');
     final response = await http.get(url);
     final List<OrderItem> loadedOrders = [];
-    final extractedData = json.decode(response.body);
+    final extractedData = json.decode(response.body) ;
 
     if (extractedData == null) {
       return;
@@ -40,8 +40,10 @@ class Orders with ChangeNotifier {
     extractedData.forEach((orderId, orderData) {
       loadedOrders.add(OrderItem(
         id: orderId,
-        amount: orderData['amount'],
+         amount: orderData['amount'],
+      
         dateTime: DateTime.parse(orderData['dateTime']),
+         
         products: (orderData['products'] as List<dynamic>)
             .map((item) => CartItem(
                 id: item['id'],
