@@ -76,22 +76,10 @@ class Products with ChangeNotifier {
 
   Future<void> fetchAndSetProducts([bool filterByUser = false]) async { // false일 때는 overview 스크린, true일 때는 user products 스크린
 
-  var _params;
-    if (filterByUser) {
-      _params = <String, String>{
-        'auth': authToken,
-        'orderBy': json.encode("creatorId"),
-        'equalTo': json.encode(userId),
-      };
-    }
-    if (filterByUser == false) {
-      _params = <String, String>{
-        'auth': authToken,
-      };
-    }
-    var url = Uri.https('flutter-update-803f6-default-rtdb.firebaseio.com',
-        '/products.json', _params);
-    
+
+final filterString = filterByUser ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    var url =Uri.parse
+        ('https://flutter-update-803f6-default-rtdb.firebaseio.com/products.json?auth=$authToken&$filterString');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body);

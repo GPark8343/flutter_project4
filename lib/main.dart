@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fourth_app1/helpers/custom_route.dart';
 import 'package:provider/provider.dart';
 
 import './providers/auth.dart';
@@ -13,6 +14,7 @@ import './screens/user_products_screen.dart';
 import './screens/edit_product_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/splash_screen.dart';
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -26,15 +28,19 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProxyProvider<Auth, Products>(
             create: (_) => Products('', '', []),
             update: (ctx, auth, previousProducts) => Products(
-                auth.token ?? '', auth.userId ?? '', previousProducts == null ? [] : previousProducts.items),
+                auth.token ?? '',
+                auth.userId ?? '',
+                previousProducts == null ? [] : previousProducts.items),
           ),
           ChangeNotifierProvider(
             create: (ctx) => Cart(),
           ),
           ChangeNotifierProxyProvider<Auth, Orders>(
             create: (_) => Orders('', '', []),
-            update: (ctx, auth, previousOrders) =>
-                Orders(auth.token??'', auth.userId??'', previousOrders == null ? [] : previousOrders.orders),
+            update: (ctx, auth, previousOrders) => Orders(
+                auth.token ?? '',
+                auth.userId ?? '',
+                previousOrders == null ? [] : previousOrders.orders),
           ),
         ],
         child: Consumer<Auth>(
@@ -43,7 +49,11 @@ class MyApp extends StatelessWidget {
                 theme: ThemeData(
                     primarySwatch: Colors.purple,
                     accentColor: Colors.deepOrange,
-                    fontFamily: 'Lato'),
+                    fontFamily: 'Lato',
+                    pageTransitionsTheme: PageTransitionsTheme(builders: {
+                      TargetPlatform.android: CustomPageTransitionBuilder(),
+                      TargetPlatform.iOS: CustomPageTransitionBuilder(),
+                    })),
                 home: auth.isAuth
                     ? ProductsOverviewScreen()
                     : FutureBuilder(
